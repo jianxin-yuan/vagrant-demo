@@ -1,0 +1,8 @@
+
+version: "3"
+services:
+  my-nginx:
+    image: nginx
+    container_name: nginx-demo
+    ports:
+    - "8080:80"

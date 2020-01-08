@@ -1,0 +1,34 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+required_plugins = %w(
+     vagrant-docker-compose
+)
+
+## 安装插件
+required_plugins.each do |plugin|
+  unless Vagrant.has_plugin? plugin
+    system "vagrant plugin install #{plugin}"
+  end
+end
+
+
+Vagrant.configure("2") do |config|
+  # 虚拟机版本
+  config.vm.box = "ubuntu/xenial64"
+
+  #端口转发
+  config.vm.network :forwarded_port, guest:8080, host:8080
+
+  config.vm.provider "virtualbox" do |vb|
+    # 虚拟机名称
+     vb.name = "vagrant-demo-machine"
+     vb.memory = "2048"
+   end
+
+  config.vm.provision :docker
+  config.vm.provision :docker_compose,
+     yml: "/vagrant/docker-compose.yml",
+     rebuild: true,
+     run: "always"
+end
