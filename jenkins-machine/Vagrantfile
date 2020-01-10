@@ -22,10 +22,12 @@ Vagrant.configure("2") do |config|
 
   config.vm.provider "virtualbox" do |vb|
     # 虚拟机名称
-     vb.name = "vagrant-demo-machine"
+     vb.name = "jenkins-machine"
      vb.memory = "2048"
    end
 
+  ## 数据卷目录文件:修改文件夹所有者权限,默认为root,jenkins不能访问
+  config.vm.provision :shell,inline: "mkdir -p /data/jenkins && chown -R vagrant /data"
   config.vm.provision :docker
   config.vm.provision :docker_compose,
      yml: "/vagrant/docker-compose.yml",
